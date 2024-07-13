@@ -3,13 +3,35 @@ import { CreateUsersDto } from './dtos/create-users.dto';
 import { GetUsersParamDto } from './dtos/get-user-param.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { UsersService } from './providers/users.service'
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('用户模块')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
-
     @Get('/:id?')
+    @ApiOperation({
+        summary:'接口描述'
+    })
+    @ApiResponse({
+        status:200,
+        description:'响应示例'
+    })
+    @ApiQuery({
+        name:'limit',
+        type:Number,
+        description:'描述',
+        example:10,
+        required:false
+    })
+    @ApiQuery({
+        name:'page',
+        type:Number,
+        description:'描述',
+        example:1,
+        required:false
+    })
     public getUsers(
         @Param() getUsersParamDto: GetUsersParamDto,
         @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
