@@ -43,8 +43,7 @@ export class UsersController {
 
     @Post()
     public createUser(@Body() createUsersDto: CreateUsersDto) {
-        console.log(createUsersDto)
-        return 'send a create user'
+       return this.usersService.createUser(createUsersDto)
     }
 
 

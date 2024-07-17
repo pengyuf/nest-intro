@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsISO8601, IsJSON, IsNotEmpty, IsOptional, IsString, IsUrl, MinLength, ValidateNested } from "class-validator"
+import { IsArray, IsEnum, IsISO8601, IsJSON, IsNotEmpty, IsOptional, IsString, IsUrl, MaxLength, MinLength, ValidateNested } from "class-validator"
 import { postType } from "../enums/postType.enum"
 import { postStatus } from "../enums/postStatus.enum"
 import { CreatePostMetaOptionsDto } from "./create-post-meta-options.dto"
@@ -8,6 +8,7 @@ export class CreatePostDto {
     @IsNotEmpty()
     @IsString()
     @MinLength(4)
+    @MaxLength(512)
     title: string
 
     @IsEnum(postType)
@@ -15,6 +16,7 @@ export class CreatePostDto {
     postType: postType
  
     @IsNotEmpty()
+    @MaxLength(256) 
     @IsString()
     slug: string
 
@@ -32,6 +34,7 @@ export class CreatePostDto {
 
     @IsUrl() 
     @IsOptional()
+    @MaxLength(1024)
     featuredImageUrl?: string
 
     @IsISO8601()
