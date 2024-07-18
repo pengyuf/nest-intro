@@ -11,21 +11,29 @@ import { TagsModule } from './tags/tags.module';
 import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { Tag } from './tags/tag.entity';
 import { MetaOption } from './meta-options/meta-options.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config'
+
+const ENV = process.env.NODE_ENV;
 
 @Module({
   imports: [UsersModule, PostsModule, AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // envFilePath:['.env.development']
+      envFilePath:!ENV?'.env':`.env.${ENV}`
+    }),
     TypeOrmModule.forRootAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService:ConfigService) => ({
+        entities: [User, Post, Tag, MetaOption],
         type: 'postgres',
-        entities: [User, Post,Tag,MetaOption],
         synchronize: true,
-        port: 5432,
-        username: 'postgres',
-        password: '123456',
-        host: 'localhost',
-        database: 'nestjs-blog'
+        port: configService.get("DATABASE_PORT"),
+        username: configService.get("DATABASE_USER"),
+        password: configService.get("DATABASE_PASSWORD"),
+        host: configService.get("DATABASE_HOST"),
+        database: configService.get("DATABASE_NAME"),
       })
     }),
     TagsModule,
