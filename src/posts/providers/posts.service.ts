@@ -23,7 +23,7 @@ export class PostsService {
           return await this.postRepository.save(post)
     }
 
-    public async findAll(userId: string) {
+    public async findAll(userId: number) {
         const user = this.userService.findOneById(userId)
         
         let posts = await this.postRepository.find({

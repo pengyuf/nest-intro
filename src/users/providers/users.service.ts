@@ -2,10 +2,12 @@ import { BadRequestException, HttpException, HttpStatus, Inject, Injectable, Req
 import { GetUsersParamDto } from "../dtos/get-user-param.dto";
 import { AuthService } from "src/auth/providers/auth.service";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { User } from "../user.entity";
 import { CreateUsersDto } from "../dtos/create-users.dto";
 import { ConfigService } from "@nestjs/config"
+import { UsersCreateManyProvider } from "./users-create-many.provider";
+import { CreateManyUsersDto } from "../dtos/create-many-users.dto";
 /**
  * 用户服务类
  */
@@ -18,7 +20,11 @@ export class UsersService {
         @Inject(forwardRef(() => AuthService))
         private readonly authService: AuthService,
 
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+
+        private readonly dataSource: DataSource,
+
+        private readonly usersCreateManyProvider: UsersCreateManyProvider
     ) { }
 
     public async createUser(createUserDto: CreateUsersDto) {
@@ -62,13 +68,13 @@ export class UsersService {
         page: number
     ) {
         throw new HttpException({
-            status:HttpStatus.FORBIDDEN,
-            error:'Api 不存在'
+            status: HttpStatus.FORBIDDEN,
+            error: 'Api 不存在'
         },
-        HttpStatus.FORBIDDEN,
-        {
-            description:'Api已移除'
-        }
+            HttpStatus.FORBIDDEN,
+            {
+                description: 'Api已移除'
+            }
         )
     }
 
@@ -89,11 +95,16 @@ export class UsersService {
                 description: '数据库连接错误'
             })
         }
-        
-        if(!user){
-           throw new BadRequestException('用户不存在')
+
+        if (!user) {
+            throw new BadRequestException('用户不存在')
         }
 
         return user
+    }
+
+
+    public async createMany(createManyUsersDto: CreateManyUsersDto) {
+        return await this.usersCreateManyProvider.createMany(createManyUsersDto)
     }
 }
