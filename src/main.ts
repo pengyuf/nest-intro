@@ -8,7 +8,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     whitelist:true,
     forbidNonWhitelisted:true,
-    transform:true // 将请求传入的数据，转化为OTO的实例
+    transform:true, // 将请求传入的数据，转化为OTO的实例
+    transformOptions:{
+      enableImplicitConversion:true, // pipe将数据隐式转换
+    }
   }))
 
 

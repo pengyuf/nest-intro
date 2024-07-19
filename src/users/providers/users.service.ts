@@ -22,8 +22,6 @@ export class UsersService {
 
         private readonly configService: ConfigService,
 
-        private readonly dataSource: DataSource,
-
         private readonly usersCreateManyProvider: UsersCreateManyProvider
     ) { }
 

@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -10,14 +10,6 @@ import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 @Injectable()
 export class UsersCreateManyProvider {
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
-
-        @Inject(forwardRef(() => AuthService))
-        private readonly authService: AuthService,
-
-        private readonly configService: ConfigService,
-
         private readonly dataSource: DataSource,
     ) { }
 
@@ -45,7 +37,11 @@ export class UsersCreateManyProvider {
                  // 有一个失败，就回滚
                  queryRunner.rollbackTransaction()
         } finally {
-                  queryRunner.release()
+            //    try {
+            //          queryRunner.release()
+            //    } catch (error) {
+            //         throw new BadRequestException('事务释放失败')
+            //    }
         }
 
         return newUsers

@@ -3,29 +3,30 @@ import { PostsService } from './providers/posts.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { PatchPostDto } from './dtos/patch-post.dto';
+import { GetPostsDto } from './dtos/get-posts.dto';
 
 @Controller('posts')
 @ApiTags('帖子模块')
 export class PostsController {
-    constructor(private readonly postsService:PostsService){}
+    constructor(private readonly postsService: PostsService) { }
 
     @Get('/:userId?')
-    public getPosts(@Param('userId') userId:number){
-        return this.postsService.findAll(userId)
+    public getPosts(@Param('userId') userId: number, @Query() postQuery: GetPostsDto) {
+        return this.postsService.findAll(postQuery, userId)
     }
 
     @Post()
-    public createPost(@Body() createPostDto:CreatePostDto){
+    public createPost(@Body() createPostDto: CreatePostDto) {
         return this.postsService.create(createPostDto)
     }
 
     @Patch()
-    public updatePost(@Body() patchPostDto:PatchPostDto){
+    public updatePost(@Body() patchPostDto: PatchPostDto) {
         console.log(patchPostDto)
     }
 
     @Delete()
-    public delPost(@Query('id',ParseIntPipe) id:number){
+    public delPost(@Query('id', ParseIntPipe) id: number) {
         return this.postsService.delPost(id)
     }
 }

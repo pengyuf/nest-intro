@@ -12,6 +12,7 @@ import { MetaOptionsModule } from './meta-options/meta-options.module';
 import { Tag } from './tags/tag.entity';
 import { MetaOption } from './meta-options/meta-options.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { PaginationModule } from './common/pagination/pagination.module';
 
 const ENV = process.env.NODE_ENV;
 
@@ -37,7 +38,8 @@ const ENV = process.env.NODE_ENV;
       })
     }),
     TagsModule,
-    MetaOptionsModule
+    MetaOptionsModule,
+    PaginationModule
   ],
   controllers: [AppController],
   providers: [AppService]
